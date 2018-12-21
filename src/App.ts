@@ -2,7 +2,7 @@ import * as bodyParser from 'body-parser';
 import * as cors from 'cors';
 import * as dotenv from 'dotenv';
 import * as express from 'express';
-import * as mysql2 from 'mysql2';
+import { Pool } from 'pg';
 import { MainController } from './controllers';
 
 interface IApp {
@@ -11,7 +11,7 @@ interface IApp {
 
 class App implements IApp {
   public static express: express.Express;
-  public static db: mysql2.Connection;
+  public static db: Pool;
   public static router: express.Router;
 
   public getExpress(): express.Express{
@@ -62,6 +62,7 @@ class App implements IApp {
     mainController.postUpload();
     mainController.getStock();
     mainController.getStatistics();
+    mainController.getStocksList();
 
     App.express.use('/', App.router);
   }

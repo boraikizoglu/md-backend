@@ -14,10 +14,14 @@ pl.query('SELECT NOW()', (err, res) => {
       console.log('An error occurred', err);
   } else {
       console.log('Successfully connected to database');
-      // console.log(res);
   }
 });
 
+// This design does not satify normal forms.
+// It could be seperated to two table to satify normal forms
+// Stock table with TABLE_ID, stocksymbol columns
+// Data table with same columns except stocksymbol
+// But since this is a simple demo application, I just created one table to make insertion/selection easier
 const createData: string = `CREATE TABLE IF NOT EXISTS test2(
     stocksymbol VARCHAR(50) NOT NULL,
     DATE VARCHAR(50) NOT NULL,
@@ -34,10 +38,11 @@ pl.query(createData, (err, res) => {
     if(err){
         console.log(err);
     } else if(res){
-        console.log('CREATED TABLE');
+        console.log('CREATED DATA TABLE');
     }
 });
 
+// index table to select faster
 const createIndex: string =
     `CREATE INDEX IF NOT EXISTS test2
     ON test2 (stocksymbol, TABLE_ID)`;
@@ -45,7 +50,7 @@ pl.query(createIndex, (err, res) => {
     if(err){
         console.log(err);
     } else if(res){
-        console.log('TABLE IS INDEXED');
+        console.log('DATA TABLE IS INDEXED');
     }
 });
 
