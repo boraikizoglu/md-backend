@@ -56,6 +56,15 @@ typings/
 
 # dotenv environment variables file
 .env
+.env.example
+.env.local
+.env.staging
 
 # next.js build output
 .next
+
+# OS files
+.DS_Store
+
+# Typescript dist file
+dist
