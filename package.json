@@ -30,6 +30,7 @@
     "@types/passport": "^0.4.6",
     "@types/passport-facebook-token": "^0.4.33",
     "@types/passport-jwt": "^3.0.1",
+    "@types/pg": "^7.4.11",
     "@types/request": "^2.47.1",
     "@types/supertest": "^2.0.5",
     "@types/validator": "^9.4.1",

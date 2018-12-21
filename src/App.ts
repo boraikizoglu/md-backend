@@ -59,7 +59,9 @@ class App implements IApp {
     // user controllers
     const mainController = new MainController();
     mainController.get();
-    mainController.getSecret();
+    mainController.postUpload();
+    mainController.getStock();
+    mainController.getStatistics();
 
     App.express.use('/', App.router);
   }
