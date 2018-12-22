@@ -33,7 +33,7 @@ class MainController implements IMainController {
 
     public get(): void{
         App.router.get('/', (req, res) => {
-            res.json({message: '/ get is called. Application is running successfully.'});
+            res.status(200).json({message: '/ get is called. Application is running successfully.'});
         });
     }
 
@@ -43,7 +43,7 @@ class MainController implements IMainController {
             if(data.length === 0){
                 return callback(true, null);
             }
-            const stockSymbol: string = fileName;
+            const stockSymbol: string = fileName.substr(0, fileName.indexOf('.'));
             const now: number = new Date().getTime();
             data.forEach((row: IStock, index) => {
                 // if row does not contain null elemenet, add to query string
@@ -66,29 +66,6 @@ class MainController implements IMainController {
     }
 
     public postUpload(): void{
-        // App.router.post('/upload2',
-        // [
-        //     check('stock_symbol').isLength({ min: 1 }),
-        //     check('data').isLength({min: 1}),
-        // ],
-        // (req: Request, res: Response) => {
-        //     // Finds the validation errors in this request and wraps them in an object with handy functions
-        //     const errors = validationResult(req);
-        //     if (!errors.isEmpty()) {
-        //         return res.status(422).json({ errors: errors.array() });
-        //     }
-
-        //     // insert data to database
-        //     App.db.query(this.uploadQueryText(req), (err, res2) => {
-        //         if(err){
-        //             console.log(err);
-        //             res.json({status: 'ERROR', error: true});
-        //         } else {
-        //             res.json({status: 'SUCCESS', error: false});
-        //         }
-        //     });
-        // });
-
         const upload = require('jquery-file-upload-middleware');
         upload.configure({
             uploadDir: __dirname + '/public/uploads/',
@@ -142,10 +119,13 @@ class MainController implements IMainController {
 
     private getStockByID(stockSymbol: string, tableID: number, callback: (err, res) => void){
         const queryText: string = `SELECT * FROM "test2" WHERE "stocksymbol" = '${stockSymbol}' AND "table_id" = ${tableID}`;
+        console.log(stockSymbol, tableID);
         App.db.query(queryText, (err2, res2: any) => {
             if(err2){
+                console.log(err2);
                 callback(err2, null);
             } else {
+                console.log(res2);
                 callback(null, res2);
             }
         });
@@ -168,9 +148,9 @@ class MainController implements IMainController {
             this.getStockByID(stock_symbol, table_id, (err2, res2: any) => {
                 if(err2){
                     console.log(err2);
-                    res.json({status: 'ERROR', error: true});
+                    res.status(500).json({status: 'ERROR', error: true});
                 } else {
-                    res.json({status: 'SUCCESS', error: false, data: res2.rows});
+                    res.status(200).json({status: 'SUCCESS', error: false, data: res2.rows});
                 }
             });
         });
@@ -182,9 +162,13 @@ class MainController implements IMainController {
             App.db.query(queryText, (err2, res2: any) => {
                 if(err2){
                     console.log(err2);
-                    res.json({status: 'ERROR', error: true});
+                    res.status(500).json({status: 'ERROR', error: true});
                 } else {
-                    res.json({status: 'SUCCESS', error: false, stocks: res2.rows});
+                    const keyValueRows: any = {};
+                    res2.rows.forEach((row: IStock) => {
+                        keyValueRows[`${row.table_id}`] = row;
+                    });
+                    res.status(200).json({status: 'SUCCESS', error: false, stocks: keyValueRows});
                 }
             });
         });
@@ -225,7 +209,7 @@ class MainController implements IMainController {
             check('table_id1').isLength({ min: 1 }),
             check('table_id2').isLength({ min: 1 }),
         ],
-        (req, res) => {
+        (req: Request, res: Response) => {
             // Finds the validation errors in this request and wraps them in an object with handy functions
             const errors = validationResult(req);
             if (!errors.isEmpty()) {
@@ -236,14 +220,14 @@ class MainController implements IMainController {
             this.getStockByID(stock_symbol1, table_id1, (err2, res2: any) => {
                 if(err2){
                     console.log(err2);
-                    res.json({status: 'ERROR', error: true});
+                    res.status(500).json({status: 'ERROR', error: true});
                 } else {
                     this.getStockByID(stock_symbol2, table_id2, (err3, res3: any) => {
                         if(err3){
                             console.log(err3);
-                            res.json({status: 'ERROR', error: true});
+                            res.status(500).json({status: 'ERROR', error: true});
                         } else {
-                            res.json({
+                            res.status(200).json({
                                 status: 'SUCCESS',
                                 error: false,
                                 stdev1: this.getStdev(res2),
