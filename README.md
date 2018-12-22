@@ -16,6 +16,12 @@ DB_PORT=8889
 PORT=3002
 ```
 
+### Install packcages
+
+```bash
+yarn install
+```
+
 ### Development ( Runs TSLint and nodemon )
 
 ```bash
@@ -33,3 +39,6 @@ yarn test
 ```bash
 yarn run lint
 ```
+
+Local
+`http://localhost:3002`

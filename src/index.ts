@@ -1,7 +1,7 @@
 import App from './App';
 
 const express = new App().getExpress();
-const port = process.env.PORT || 3005;
+const port = process.env.PORT || 3002;
 
 express.listen(port, (err: any) => {
   if (err) {
