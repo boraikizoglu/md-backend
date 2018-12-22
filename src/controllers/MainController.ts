@@ -119,7 +119,6 @@ class MainController implements IMainController {
 
     private getStockByID(stockSymbol: string, tableID: number, callback: (err, res) => void){
         const queryText: string = `SELECT * FROM "test2" WHERE "stocksymbol" = '${stockSymbol}' AND "table_id" = ${tableID}`;
-        console.log(stockSymbol, tableID);
         App.db.query(queryText, (err2, res2: any) => {
             if(err2){
                 console.log(err2);
@@ -209,14 +208,14 @@ class MainController implements IMainController {
             check('table_id1').isLength({ min: 1 }),
             check('table_id2').isLength({ min: 1 }),
         ],
-        (req: Request, res: Response) => {
+        (req: any, res: Response) => {
             // Finds the validation errors in this request and wraps them in an object with handy functions
             const errors = validationResult(req);
             if (!errors.isEmpty()) {
                 return res.status(422).json({ errors: errors.array() });
             }
 
-            const { stock_symbol1, stock_symbol2, table_id1, table_id2 } = req.body;
+            const { stock_symbol1, stock_symbol2, table_id1, table_id2 } = req.headers;
             this.getStockByID(stock_symbol1, table_id1, (err2, res2: any) => {
                 if(err2){
                     console.log(err2);
