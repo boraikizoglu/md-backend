@@ -143,7 +143,7 @@ class MainController implements IMainController {
                 return res.status(422).json({ errors: errors.array() });
             }
 
-            const {stock_symbol, table_id}: any = req.body;
+            const {stock_symbol, table_id}: any = req.headers;
             this.getStockByID(stock_symbol, table_id, (err2, res2: any) => {
                 if(err2){
                     console.log(err2);
