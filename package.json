@@ -6,6 +6,7 @@
   "scripts": {
     "build": "tsc",
     "dev": "tsc --watch & nodemon --inspect dist & tslint -c tslint.json -p tsconfig.json",
+    "start": "tsc --watch & nodemon --inspect dist & tslint -c tslint.json -p tsconfig.json",
     "devServer": "tsc --watch & nodemon --inspect dist",
     "test": "mocha -r ts-node/register src/**/*.spec.ts",
     "tsc": "tsc",
